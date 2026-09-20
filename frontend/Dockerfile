@@ -1,12 +1,21 @@
 # Build stage
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
+# Copy dependency definitions
 COPY package*.json ./
+
+# Install dependencies cleanly
 RUN npm ci
 
+# Copy source code (excluding files in .dockerignore)
 COPY . .
+
+# Ensure executable permissions on node_modules binaries
+RUN chmod -R +x node_modules/.bin
+
+# Build production bundle
 RUN npm run build
 
 # Production stage with Nginx

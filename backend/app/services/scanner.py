@@ -80,10 +80,11 @@ class ScannerService:
             await db.refresh(scan)
             return scan
 
-        except Exception as e:
-            logger.exception(f"Scan {scan_id} failed with error: {e}")
-            scan.status = "FAILED"
-            scan.error_message = str(e)
-            scan.completed_at = datetime.now(timezone.utc)
-            await db.commit()
-            return scan
+        except Exception:
+                logger.exception("Scan %s failed", scan_id)
+            
+                scan.status = "FAILED"
+                scan.error_message = str(e)
+                scan.completed_at = datetime.now(timezone.utc)
+                await db.commit()
+                return scan

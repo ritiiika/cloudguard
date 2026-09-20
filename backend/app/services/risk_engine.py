@@ -1,11 +1,12 @@
-from typing import Any, Dict, List
+from typing import Any, ClassVar
+
 from app.rules.base import RuleResult
 
 
 class RiskEngine:
     """Calculates overall security posture score and risk categorizations."""
 
-    SEVERITY_WEIGHTS = {
+    SEVERITY_WEIGHTS: ClassVar[dict[str, int]] = {
         "CRITICAL": 25,
         "HIGH": 15,
         "MEDIUM": 7,
@@ -14,7 +15,7 @@ class RiskEngine:
     }
 
     @classmethod
-    def calculate_score(cls, findings: List[RuleResult]) -> Dict[str, Any]:
+    def calculate_score(cls, findings: list[RuleResult]) -> dict[str, Any]:
         """Calculates 0-100 score where 100 is pristine and 0 is severe risk."""
         counts = {
             "critical": 0,

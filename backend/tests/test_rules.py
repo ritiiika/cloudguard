@@ -1,14 +1,11 @@
-from datetime import datetime, timezone, timedelta
-from app.rules.s3.public_access import S3PublicAccessBlockRule
-from app.rules.s3.encryption import S3BucketEncryptionRule
-from app.rules.s3.versioning import S3BucketVersioningRule
-from app.rules.iam.root_mfa import IAMRootMFAEnabledRule
-from app.rules.iam.access_keys import IAMInactiveAccessKeysRule
-from app.rules.iam.wildcard import IAMWildcardPolicyRule
+from datetime import UTC, datetime, timedelta
+
 from app.rules.ec2.open_ssh import EC2OpenSSHRule
-from app.rules.ec2.open_rdp import EC2OpenRDPRule
+from app.rules.iam.access_keys import IAMInactiveAccessKeysRule
+from app.rules.iam.root_mfa import IAMRootMFAEnabledRule
 from app.rules.rds.public_db import RDSPublicAccessRule
-from app.rules.rds.encryption import RDSEncryptionRule
+from app.rules.s3.encryption import S3BucketEncryptionRule
+from app.rules.s3.public_access import S3PublicAccessBlockRule
 from app.services.risk_engine import RiskEngine
 
 
@@ -73,7 +70,7 @@ def test_iam_root_mfa_rule():
 def test_iam_access_keys_rule():
     rule = IAMInactiveAccessKeysRule()
 
-    old_date = datetime.now(timezone.utc) - timedelta(days=120)
+    old_date = datetime.now(UTC) - timedelta(days=120)
     user_with_old_key = {
         "username": "developer",
         "access_keys": [{"AccessKeyId": "AKIA123", "Status": "Active", "CreateDate": old_date}],

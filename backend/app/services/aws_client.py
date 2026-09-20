@@ -1,5 +1,5 @@
+
 import boto3
-from typing import Optional
 from app.core.config import settings
 from app.models.cloud_account import CloudAccount
 
@@ -8,7 +8,7 @@ class AWSClientManager:
     """Manages boto3 sessions and client creation with support for AssumeRole and direct credentials."""
 
     @staticmethod
-    def get_session(account: Optional[CloudAccount] = None, region: Optional[str] = None) -> boto3.Session:
+    def get_session(account: CloudAccount | None = None, region: str | None = None) -> boto3.Session:
         target_region = region or (account.default_region if account else settings.AWS_REGION)
 
         # Base kwargs for boto3 Session

@@ -1,6 +1,6 @@
 import pytest
-from httpx import AsyncClient
 from app.models.cloud_account import CloudAccount
+from httpx import AsyncClient
 
 
 @pytest.mark.asyncio

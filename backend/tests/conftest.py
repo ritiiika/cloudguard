@@ -1,23 +1,24 @@
 import asyncio
 import os
+
+import boto3
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-import boto3
+from httpx import ASGITransport, AsyncClient
 from moto import mock_aws
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 # Ensure test settings environment
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///:memory:"
 os.environ["SECRET_KEY"] = "test-secret-key-for-unit-testing-32-chars-long"
 os.environ["AWS_DEFAULT_REGION"] = "us-east-1"
 
+from app.core.security import create_access_token, get_password_hash
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
-from app.core.security import get_password_hash, create_access_token
-from app.models.user import User
 from app.models.cloud_account import CloudAccount
+from app.models.user import User
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

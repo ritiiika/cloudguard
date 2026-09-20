@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class S3BucketVersioningRule(BaseRule):
     description = "S3 bucket does not have object versioning enabled, leaving objects vulnerable to accidental deletion or overwrites."
     remediation = "Enable Bucket Versioning in S3 properties to maintain immutable history of modified objects."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         versioning_status = resource.get("versioning", "Disabled")
         if versioning_status != "Enabled":
             return [

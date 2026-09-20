@@ -1,6 +1,8 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from app.db.base import Base
 
 
@@ -17,7 +19,7 @@ class Scan(Base):
     low_count = Column(Integer, default=0, nullable=False)
     total_resources_scanned = Column(Integer, default=0, nullable=False)
     error_message = Column(Text, nullable=True)
-    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
     completed_at = Column(DateTime(timezone=True), nullable=True)
 
     account = relationship("CloudAccount", back_populates="scans")

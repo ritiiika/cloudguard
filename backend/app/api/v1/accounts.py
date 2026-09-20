@@ -1,13 +1,12 @@
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
 from app.api import deps
 from app.db.session import get_db
 from app.models.cloud_account import CloudAccount
 from app.models.user import User
 from app.schemas.cloud_account import CloudAccountCreate, CloudAccountOut
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
@@ -60,7 +59,7 @@ async def create_cloud_account(
     return account
 
 
-@router.get("/", response_model=List[CloudAccountOut])
+@router.get("/", response_model=list[CloudAccountOut])
 async def list_cloud_accounts(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(deps.get_current_user),
@@ -107,4 +106,3 @@ async def delete_cloud_account(
 
     await db.delete(account)
     await db.commit()
-    return None

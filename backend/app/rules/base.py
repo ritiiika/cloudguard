@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -12,7 +13,7 @@ class RuleResult(BaseModel):
     title: str
     description: str
     remediation: str
-    raw_details: Optional[Dict[str, Any]] = None
+    raw_details: dict[str, Any] | None = None
 
 
 class BaseRule(ABC):
@@ -24,6 +25,5 @@ class BaseRule(ABC):
     remediation: str = ""
 
     @abstractmethod
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         """Evaluates a discovered resource and returns a list of RuleResult (failed findings or passes)."""
-        pass

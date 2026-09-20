@@ -1,41 +1,50 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
-from app.rules.s3 import S3PublicAccessBlockRule, S3BucketEncryptionRule, S3BucketVersioningRule
-from app.rules.iam import IAMRootMFAEnabledRule, IAMInactiveAccessKeysRule, IAMWildcardPolicyRule
-from app.rules.ec2 import EC2OpenSSHRule, EC2OpenRDPRule
-from app.rules.rds import RDSPublicAccessRule, RDSEncryptionRule
+from app.rules.ec2 import EC2OpenRDPRule, EC2OpenSSHRule
+from app.rules.iam import (
+    IAMInactiveAccessKeysRule,
+    IAMRootMFAEnabledRule,
+    IAMWildcardPolicyRule,
+)
+from app.rules.rds import RDSEncryptionRule, RDSPublicAccessRule
+from app.rules.s3 import (
+    S3BucketEncryptionRule,
+    S3BucketVersioningRule,
+    S3PublicAccessBlockRule,
+)
 
 
 class RuleRegistry:
     def __init__(self):
         # S3 bucket rules
-        self.s3_rules: List[BaseRule] = [
+        self.s3_rules: list[BaseRule] = [
             S3PublicAccessBlockRule(),
             S3BucketEncryptionRule(),
             S3BucketVersioningRule(),
         ]
         # IAM root & user rules
-        self.iam_root_rules: List[BaseRule] = [
+        self.iam_root_rules: list[BaseRule] = [
             IAMRootMFAEnabledRule(),
         ]
-        self.iam_user_rules: List[BaseRule] = [
+        self.iam_user_rules: list[BaseRule] = [
             IAMInactiveAccessKeysRule(),
             IAMWildcardPolicyRule(),
         ]
         # Security Group rules
-        self.sg_rules: List[BaseRule] = [
+        self.sg_rules: list[BaseRule] = [
             EC2OpenSSHRule(),
             EC2OpenRDPRule(),
         ]
         # RDS rules
-        self.rds_rules: List[BaseRule] = [
+        self.rds_rules: list[BaseRule] = [
             RDSPublicAccessRule(),
             RDSEncryptionRule(),
         ]
 
-    def evaluate_inventory(self, inventory: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate_inventory(self, inventory: dict[str, Any]) -> list[RuleResult]:
         """Runs all registered security checks against the discovered resource inventory."""
-        findings: List[RuleResult] = []
+        findings: list[RuleResult] = []
 
         # 1. Evaluate S3 Buckets
         for bucket in inventory.get("s3", []):

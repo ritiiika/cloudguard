@@ -1,23 +1,22 @@
 import logging
-from datetime import datetime, timezone
-from typing import Optional
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from datetime import UTC, datetime
 
 from app.models.cloud_account import CloudAccount
-from app.models.scan import Scan
 from app.models.finding import Finding
+from app.models.scan import Scan
+from app.rules.registry import rule_registry
 from app.services.aws_client import AWSClientManager
 from app.services.aws_discovery import AWSResourceDiscovery
-from app.rules.registry import rule_registry
 from app.services.risk_engine import RiskEngine
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
 
 class ScannerService:
     @staticmethod
-    async def execute_scan(scan_id: int, db: AsyncSession) -> Optional[Scan]:
+    async def execute_scan(scan_id: int, db: AsyncSession) -> Scan | None:
         # 1. Fetch scan and associated account
         result = await db.execute(select(Scan).where(Scan.id == scan_id))
         scan = result.scalar_one_or_none()
@@ -73,7 +72,7 @@ class ScannerService:
             scan.medium_count = risk_summary["medium_count"]
             scan.low_count = risk_summary["low_count"]
             scan.total_resources_scanned = inventory.get("total_resources_scanned", 0)
-            scan.completed_at = datetime.now(timezone.utc)
+            scan.completed_at = datetime.now(UTC)
             scan.error_message = None
 
             await db.commit()
@@ -82,9 +81,9 @@ class ScannerService:
 
         except Exception as e:
                 logger.exception("Scan %s failed", scan_id)
-            
+
                 scan.status = "FAILED"
                 scan.error_message = str(e)
-                scan.completed_at = datetime.now(timezone.utc)
+                scan.completed_at = datetime.now(UTC)
                 await db.commit()
                 return scan

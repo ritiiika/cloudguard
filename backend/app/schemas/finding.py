@@ -1,5 +1,6 @@
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -16,7 +17,7 @@ class FindingBase(BaseModel):
 class FindingOut(FindingBase):
     id: int
     scan_id: int
-    raw_details: Optional[Dict[str, Any]] = None
+    raw_details: dict[str, Any] | None = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

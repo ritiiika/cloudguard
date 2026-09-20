@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class RDSPublicAccessRule(BaseRule):
     description = "RDS database instance has the 'PubliclyAccessible' flag enabled, exposing the database port to the internet."
     remediation = "Modify the RDS instance and set 'Publicly Accessible' to No. Place database in private database subnets."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         # resource is a DBInstance dict
         db_id = resource.get("DBInstanceIdentifier", "unknown")
         db_arn = resource.get("DBInstanceArn", f"arn:aws:rds:::db:{db_id}")

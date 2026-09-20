@@ -1,7 +1,3 @@
-from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
 from app.api import deps
 from app.db.session import get_db
@@ -12,6 +8,9 @@ from app.models.user import User
 from app.schemas.finding import FindingOut
 from app.schemas.scan import ScanCreate, ScanOut
 from app.services.scanner import ScannerService
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
@@ -51,9 +50,9 @@ async def trigger_scan(
     return completed_scan or scan
 
 
-@router.get("/", response_model=List[ScanOut])
+@router.get("/", response_model=list[ScanOut])
 async def list_scans(
-    account_id: Optional[int] = None,
+    account_id: int | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(deps.get_current_user),
 ):
@@ -87,10 +86,10 @@ async def get_scan(
     return scan
 
 
-@router.get("/{scan_id}/findings", response_model=List[FindingOut])
+@router.get("/{scan_id}/findings", response_model=list[FindingOut])
 async def get_scan_findings(
     scan_id: int,
-    severity: Optional[str] = Query(None, description="Filter by severity: CRITICAL, HIGH, MEDIUM, LOW, INFO"),
+    severity: str | None = Query(None, description="Filter by severity: CRITICAL, HIGH, MEDIUM, LOW, INFO"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(deps.get_current_user),
 ):

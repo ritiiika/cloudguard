@@ -1,5 +1,6 @@
-from datetime import datetime, timezone, timedelta
-from typing import Any, Dict, List
+from datetime import UTC, datetime, timedelta
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -11,14 +12,14 @@ class IAMInactiveAccessKeysRule(BaseRule):
     description = "IAM user has active access keys that have not been rotated within the recommended 90-day window."
     remediation = "Generate a new access key, update applications, and deactivate/delete old access keys."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         # resource is an individual IAM user info dict
         username = resource.get("username", "unknown")
         user_arn = resource.get("arn", f"arn:aws:iam::user/{username}")
         keys = resource.get("access_keys", [])
-        
+
         findings = []
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         max_age = timedelta(days=90)
 
         for key in keys:
@@ -27,7 +28,7 @@ class IAMInactiveAccessKeysRule(BaseRule):
                 if create_date:
                     # Handle timezone aware / naive
                     if create_date.tzinfo is None:
-                        create_date = create_date.replace(tzinfo=timezone.utc)
+                        create_date = create_date.replace(tzinfo=UTC)
                     age = now - create_date
                     if age > max_age:
                         findings.append(

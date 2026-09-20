@@ -1,7 +1,3 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import func, select
-
 from app.api import deps
 from app.db.session import get_db
 from app.models.cloud_account import CloudAccount
@@ -9,7 +5,9 @@ from app.models.finding import Finding
 from app.models.scan import Scan
 from app.models.user import User
 from app.schemas.dashboard import DashboardOverview, SeverityCount
-from app.schemas.finding import FindingOut
+from fastapi import APIRouter, Depends
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 

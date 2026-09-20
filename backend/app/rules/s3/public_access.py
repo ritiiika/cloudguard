@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,9 +11,9 @@ class S3PublicAccessBlockRule(BaseRule):
     description = "S3 bucket does not have all 4 Public Access Block settings enabled (BlockPublicAcls, IgnorePublicAcls, BlockPublicPolicy, RestrictPublicBuckets)."
     remediation = "Enable 'Block all public access' at the bucket level using the AWS Console or aws s3api put-public-access-block."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         pab = resource.get("public_access_block") or {}
-        
+
         block_acls = pab.get("BlockPublicAcls", False)
         ignore_acls = pab.get("IgnorePublicAcls", False)
         block_policy = pab.get("BlockPublicPolicy", False)

@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import List, Optional
+
 from pydantic import BaseModel, ConfigDict
+
 from app.schemas.finding import FindingOut
 
 
@@ -18,12 +19,12 @@ class ScanOut(BaseModel):
     medium_count: int
     low_count: int
     total_resources_scanned: int
-    error_message: Optional[str] = None
+    error_message: str | None = None
     created_at: datetime
-    completed_at: Optional[datetime] = None
+    completed_at: datetime | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class ScanDetail(ScanOut):
-    findings: List[FindingOut] = []
+    findings: list[FindingOut] = []

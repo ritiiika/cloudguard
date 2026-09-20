@@ -1,5 +1,5 @@
+from app.api.v1 import accounts, auth, dashboard, findings, scans
 from fastapi import APIRouter
-from app.api.v1 import auth, accounts, scans, findings, dashboard
 
 api_router = APIRouter()
 

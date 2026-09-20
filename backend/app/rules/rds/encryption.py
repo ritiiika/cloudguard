@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class RDSEncryptionRule(BaseRule):
     description = "RDS database instance is not configured with AWS KMS storage encryption at rest."
     remediation = "Enable KMS encryption for the RDS instance. Note: unencrypted RDS instances require creating a snapshot, copying with encryption, and restoring."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         db_id = resource.get("DBInstanceIdentifier", "unknown")
         db_arn = resource.get("DBInstanceArn", f"arn:aws:rds:::db:{db_id}")
         is_encrypted = resource.get("StorageEncrypted", False)

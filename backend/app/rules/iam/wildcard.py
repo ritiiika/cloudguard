@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class IAMWildcardPolicyRule(BaseRule):
     description = "IAM user has AdministratorAccess or full wildcard permissions attached directly instead of role-based least privilege."
     remediation = "Apply least-privilege permissions by granting specific service actions and scoping resources to ARNs."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         username = resource.get("username", "unknown")
         user_arn = resource.get("arn", f"arn:aws:iam::user/{username}")
         attached_policies = resource.get("attached_policies", [])

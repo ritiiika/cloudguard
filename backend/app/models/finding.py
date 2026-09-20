@@ -1,7 +1,9 @@
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from app.db.base import Base
 
 
@@ -18,7 +20,7 @@ class Finding(Base):
     description = Column(Text, nullable=False)
     remediation = Column(Text, nullable=False)
     raw_details_json = Column(Text, nullable=True)
-    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(UTC))
 
     scan = relationship("Scan", back_populates="findings")
 

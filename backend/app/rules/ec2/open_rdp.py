@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class EC2OpenRDPRule(BaseRule):
     description = "Security Group has an inbound rule allowing port 3389 (RDP) open to the entire internet (0.0.0.0/0 or ::/0)."
     remediation = "Restrict RDP port 3389 access to private corporate IP subnets or route over AWS Client VPN."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         group_id = resource.get("GroupId", "unknown")
         group_name = resource.get("GroupName", "unknown")
         ip_permissions = resource.get("IpPermissions", [])
@@ -21,11 +22,8 @@ class EC2OpenRDPRule(BaseRule):
             ip_protocol = perm.get("IpProtocol")
 
             port_matches = False
-            if ip_protocol == "-1":
+            if ip_protocol == "-1" or (from_port is not None and to_port is not None and from_port <= 3389 <= to_port):
                 port_matches = True
-            elif from_port is not None and to_port is not None:
-                if from_port <= 3389 <= to_port:
-                    port_matches = True
 
             if port_matches:
                 for ip_range in perm.get("IpRanges", []):

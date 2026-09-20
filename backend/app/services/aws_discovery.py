@@ -1,5 +1,6 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any
+
 import boto3
 from botocore.exceptions import ClientError
 
@@ -12,7 +13,7 @@ class AWSResourceDiscovery:
     def __init__(self, session: boto3.Session):
         self.session = session
 
-    def discover_s3_buckets(self) -> List[Dict[str, Any]]:
+    def discover_s3_buckets(self) -> list[dict[str, Any]]:
         s3 = self.session.client("s3")
         buckets_data = []
 
@@ -39,7 +40,7 @@ class AWSResourceDiscovery:
             try:
                 pab = s3.get_public_access_block(Bucket=name)
                 bucket_info["public_access_block"] = pab.get("PublicAccessBlockConfiguration", {})
-            except ClientError as e:
+            except ClientError:
                 bucket_info["public_access_block"] = {
                     "BlockPublicAcls": False,
                     "IgnorePublicAcls": False,
@@ -72,7 +73,7 @@ class AWSResourceDiscovery:
 
         return buckets_data
 
-    def discover_iam(self) -> Dict[str, Any]:
+    def discover_iam(self) -> dict[str, Any]:
         iam = self.session.client("iam")
         iam_data = {
             "account_mfa_enabled": False,
@@ -122,7 +123,7 @@ class AWSResourceDiscovery:
 
         return iam_data
 
-    def discover_ec2_and_security_groups(self) -> Dict[str, Any]:
+    def discover_ec2_and_security_groups(self) -> dict[str, Any]:
         ec2 = self.session.client("ec2")
         data = {
             "security_groups": [],
@@ -156,7 +157,7 @@ class AWSResourceDiscovery:
 
         return data
 
-    def discover_rds(self) -> List[Dict[str, Any]]:
+    def discover_rds(self) -> list[dict[str, Any]]:
         rds = self.session.client("rds")
         try:
             response = rds.describe_db_instances()
@@ -165,7 +166,7 @@ class AWSResourceDiscovery:
             logger.warning(f"Failed to describe RDS instances: {e}")
             return []
 
-    def discover_all(self) -> Dict[str, Any]:
+    def discover_all(self) -> dict[str, Any]:
         """Discovers all supported AWS resources in the target environment."""
         s3_resources = self.discover_s3_buckets()
         iam_resources = self.discover_iam()

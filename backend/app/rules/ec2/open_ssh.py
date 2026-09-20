@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class EC2OpenSSHRule(BaseRule):
     description = "Security Group has an inbound rule allowing port 22 (SSH) open to the entire internet (0.0.0.0/0 or ::/0)."
     remediation = "Restrict SSH port 22 access to specific bastion IPs, VPN CIDR blocks, or use AWS Systems Manager (SSM) Session Manager instead."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         # resource is a SecurityGroup dictionary
         group_id = resource.get("GroupId", "unknown")
         group_name = resource.get("GroupName", "unknown")
@@ -23,11 +24,8 @@ class EC2OpenSSHRule(BaseRule):
 
             # Check if port 22 is included in the range (or -1 for all traffic)
             port_matches = False
-            if ip_protocol == "-1":
+            if ip_protocol == "-1" or (from_port is not None and to_port is not None and from_port <= 22 <= to_port):
                 port_matches = True
-            elif from_port is not None and to_port is not None:
-                if from_port <= 22 <= to_port:
-                    port_matches = True
 
             if port_matches:
                 for ip_range in perm.get("IpRanges", []):

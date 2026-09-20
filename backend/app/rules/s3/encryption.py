@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class S3BucketEncryptionRule(BaseRule):
     description = "S3 bucket does not have default server-side encryption (SSE-S3 or SSE-KMS) configured."
     remediation = "Enable default SSE-S3 or AWS KMS encryption under bucket Properties -> Default encryption."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         encryption = resource.get("encryption")
         if not encryption or not encryption.get("Rules"):
             return [

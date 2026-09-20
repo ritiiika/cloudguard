@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from app.rules.base import BaseRule, RuleResult
 
 
@@ -10,7 +11,7 @@ class IAMRootMFAEnabledRule(BaseRule):
     description = "The AWS account root user does not have Multi-Factor Authentication (MFA) enabled."
     remediation = "Sign in as the root user and enable a hardware or virtual MFA device immediately under IAM Security Credentials."
 
-    def evaluate(self, resource: Dict[str, Any]) -> List[RuleResult]:
+    def evaluate(self, resource: dict[str, Any]) -> list[RuleResult]:
         # resource is the entire iam_data dictionary
         mfa_enabled = resource.get("account_mfa_enabled", False)
         if not mfa_enabled:

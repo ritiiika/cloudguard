@@ -80,7 +80,7 @@ class ScannerService:
             await db.refresh(scan)
             return scan
 
-        except Exception:
+        except Exception as e:
                 logger.exception("Scan %s failed", scan_id)
             
                 scan.status = "FAILED"

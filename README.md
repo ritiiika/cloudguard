@@ -126,22 +126,3 @@ All 13 test suites validate authentication, security rules evaluation, mock AWS 
 
 ---
 
-## 📄 Resume Bullet Points (Ready to Use)
-
-### For Cloud / DevOps Roles
-> - **CloudGuard (Cloud Security & Posture Management)** | *Python, FastAPI, AWS (Boto3), Terraform, Docker, CI/CD*
->   - Engineered an automated cloud security posture platform that ingests AWS configurations across S3, IAM, EC2, and RDS to detect misconfigurations and generate actionable remediation paths.
->   - Built a quantitative risk engine calculating a 0–100 security score using weighted severity penalties, reducing manual cloud audit time by 90%.
->   - Authored Terraform IaC to provision VPC-isolated PostgreSQL and App Runner environments, integrated with Checkov and GitHub Actions CI/CD.
-
-### For Full-Stack Roles
-> - **CloudGuard (Full-Stack Security Platform)** | *React, TypeScript, Tailwind CSS, Python, FastAPI, PostgreSQL, Docker*
->   - Developed a responsive security dashboard in React and Tailwind featuring animated SVG score gauges, severity filtering, and finding remediation drawers.
->   - Built a high-performance asynchronous FastAPI REST backend with JWT authentication, Pydantic v2 schemas, and SQLAlchemy ORM on PostgreSQL.
->   - Containerized the entire multi-tier application using multi-stage Docker builds and orchestrated local/production deployments with Docker Compose.
-
-### For SDET / Testing / Automation Roles
-> - **CloudGuard (Test-Driven Cloud Security Scanner)** | *Python, Pytest, Moto (AWS Mocking), Newman, GitHub Actions*
->   - Designed a comprehensive automated testing framework using `pytest` and `moto` to simulate live AWS multi-service environments locally with zero cloud costs.
->   - Implemented 100% test coverage for authentication security, rule evaluation engines, and end-to-end scanning workflows.
->   - Configured GitHub Actions CI/CD pipelines executing automated linting, security scans, unit tests, and container image smoke tests on every pull request.

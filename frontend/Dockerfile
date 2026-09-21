@@ -13,7 +13,6 @@ RUN npm ci
 COPY . .
 
 # Ensure executable permissions on node_modules binaries
-RUN chmod -R +x node_modules/.bin
 
 # Build production bundle
 RUN npm run build
